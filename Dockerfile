@@ -13,6 +13,7 @@ COPY ./back /src
 
 WORKDIR /src
 
+RUN sed -i 's/\r$//' gradlew
 RUN ./gradlew build
 
 FROM alpine:3.19 as front

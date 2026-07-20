@@ -1,58 +1,37 @@
-FROM node as front-build
+FROM node:20-alpine AS front-builder
+WORKDIR /app
+COPY ./front/package*.json ./
+RUN npm ci
+COPY ./front .
+RUN npm run build
 
-COPY ./front /src
 
-WORKDIR /src
-
-RUN npm ci \
-    && npx @angular/cli build --optimization
-
-FROM gradle:jdk17 as back-build
-
-COPY ./back /src
-
-WORKDIR /src
-
+FROM gradle:8.7-jdk17 AS back-build
+WORKDIR /app
+COPY ./back .
 RUN sed -i 's/\r$//' gradlew
 RUN ./gradlew build
 
-FROM alpine:3.19 as front
 
-COPY --from=front-build /src/dist/microcrm/browser /app/front
-COPY misc/docker/Caddyfile /app/Caddyfile
-
-RUN apk add caddy
-
-WORKDIR /app
-
+FROM nginx:1.27-alpine as front
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=front-builder /app/dist/microcrm/browser /usr/share/nginx/html
 EXPOSE 80
-EXPOSE 443
+CMD ["nginx", "-g", "daemon off;"]
 
-CMD ["/usr/sbin/caddy", "run"]
-
-FROM alpine:3.19 as back
-
-COPY --from=back-build /src/build/libs/microcrm-0.0.1-SNAPSHOT.jar /app/back/microcrm-0.0.1-SNAPSHOT.jar
-
-RUN apk add openjdk21-jre-headless
-
+FROM eclipse-temurin:17-jre-jammy as back
 WORKDIR /app
+COPY --from=back-build /app/build/libs/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","app.jar"]
 
-EXPOSE 4200
-
-CMD ["java", "-jar", "/app/back/microcrm-0.0.1-SNAPSHOT.jar"]
 
 FROM alpine:3.19 as standalone
-
-COPY --from=front / /
-COPY --from=back / /
+COPY --from=front /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=back /app/app.jar /app/app.jar
 COPY misc/docker/supervisor.ini /app/supervisor.ini
-
-RUN apk add supervisor
-
+RUN apk add nginx openjdk21-jre-headless supervisor
 WORKDIR /app
-
 CMD ["/usr/bin/supervisord", "-c", "/app/supervisor.ini"]
-
 
 

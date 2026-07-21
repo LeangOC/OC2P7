@@ -54,5 +54,16 @@ Image
     - ![Github_Action_Backend.png](My/MyEtapes/dev3/Github_Action_Backend.png)
     
   - Test Pull Request avec la branche test-ci
-
+    pull_requests_dev3.md :
+    - ![pull_requests_1.png](My/MyEtapes/dev3/pull_requests_1.png)      
+    -  ![pull_requests_2.png](My/MyEtapes/dev3/pull_requests_2.png)
+    - ![pull_requests_3.png](My/MyEtapes/dev3/pull_requests_3.png)
+    - ![pull_requests_4.png](My/MyEtapes/dev3/pull_requests_4.png)
+    - ![pull_requests_5.png](My/MyEtapes/dev3/pull_requests_5.png)
+    - ![pull_requests_6.png](My/MyEtapes/dev3/pull_requests_6.png)
+    - ![pull_requests_7.png](My/MyEtapes/dev3/pull_requests_7.png)
+    - ![pull_requests_8.png](My/MyEtapes/dev3/pull_requests_8.png)
+      pull_requests_sonaCloud.md : 
+2. Ajout test couverture JaCoCo
+ - 
 

@@ -48,6 +48,11 @@ Image
   - Error droit d'exécution gradlew : ![Ci_backend_error.png](Ci_backend_error.png)
   - Afficher droit gradlew dans pipeline : ![Pipeline_Afficher_Gradlew_Droit.png](My/MyEtapes/dev3/Pipeline_Afficher_Gradlew_Droit.png)
   - Forcer droit exécution Git INDEX : ![git_local_forcer_index_droit_fichier.png](My/MyEtapes/dev3/git_local_forcer_index_droit_fichier.png)
-  - ci_forcer_git_indew.yml 
+  - ci_forcer_git_indew.yml
+  - Analyse ci.yml par rapport aux étapes dans Github Action : 
+    - ci_backen_analyse_Github_Action.md
+    - ![Github_Action_Backend.png](My/MyEtapes/dev3/Github_Action_Backend.png)
+    
+  - Test Pull Request avec la branche test-ci
 
 

@@ -64,5 +64,6 @@ Image
     - ![pull_requests_7.png](My/MyEtapes/dev3/pull_requests_7.png)
     - ![pull_requests_8.png](My/MyEtapes/dev3/pull_requests_8.png)
       pull_requests_sonaCloud.md : 
-
+2. Ajout test couverture JaCoCo
+ - 
 

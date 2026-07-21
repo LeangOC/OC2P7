@@ -42,3 +42,7 @@ Image
    - $ docker compose up -d   
    - Verification : docker compose ps :
    ![docker-compose_ps.png](misc/screenshots/docker-compose_ps.png)
+
+# dev3
+1. Implémentation Pipeline CI pour le backend
+

@@ -27,15 +27,7 @@ jobs:
       - name: Build and Test
         run: ./gradlew build jacocoTestReport
 
-      - name: Check JaCoCo report
-        run: |
-          pwd
-          find . -name "jacocoTestReport.xml" 
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -X

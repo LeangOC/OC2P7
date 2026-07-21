@@ -65,5 +65,8 @@ Image
     - ![pull_requests_8.png](My/MyEtapes/dev3/pull_requests_8.png)
       pull_requests_sonaCloud.md : 
 2. Ajout test couverture JaCoCo
- - 
+
+# dev4 
+1. Implémentation sonacloud dans ci
+   
 

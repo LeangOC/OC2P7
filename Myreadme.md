@@ -68,6 +68,6 @@ Image
 
 # dev4 
 1. Implémentation sonacloud dans ci
-   
+2. Test JaCoCo : couverture 89%   
 
 

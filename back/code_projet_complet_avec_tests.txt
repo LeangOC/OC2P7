@@ -318,6 +318,68 @@ public class SpringDataRestCustomization implements RepositoryRestConfigurer {
 }
 
 
+===== src/test/java/com/openclassroom/devops/orion/microcrm/InitialDataFixtureTest.java =====
+package com.openclassroom.devops.orion.microcrm;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.Test;
+
+class InitialDataFixtureTest {
+
+    @Test
+    void canBeLoadedReturnsTrueWhenRepositoryEmpty() throws Exception {
+
+        InitialDataFixture fixture = new InitialDataFixture();
+
+        PersonRepository personRepository = mock(PersonRepository.class);
+
+        when(personRepository.count()).thenReturn(0L);
+
+        Field field = InitialDataFixture.class.getDeclaredField("personRepository");
+        field.setAccessible(true);
+        field.set(fixture, personRepository);
+
+        assertTrue(fixture.canBeLoaded());
+    }
+
+    @Test
+    void canBeLoadedReturnsFalseWhenRepositoryNotEmpty() throws Exception {
+
+        InitialDataFixture fixture = new InitialDataFixture();
+
+        PersonRepository personRepository = mock(PersonRepository.class);
+
+        when(personRepository.count()).thenReturn(5L);
+
+        Field field = InitialDataFixture.class.getDeclaredField("personRepository");
+        field.setAccessible(true);
+        field.set(fixture, personRepository);
+
+        assertFalse(fixture.canBeLoaded());
+    }
+
+    @Test
+    void loadShouldSaveOrganization() throws Exception {
+
+        InitialDataFixture fixture = new InitialDataFixture();
+
+        OrganizationRepository organizationRepository = mock(OrganizationRepository.class);
+
+        Field field = InitialDataFixture.class.getDeclaredField("organizationRepository");
+        field.setAccessible(true);
+        field.set(fixture, organizationRepository);
+
+        fixture.load();
+
+        verify(organizationRepository).saveAll(any());
+    }
+}
+
+
 ===== src/test/java/com/openclassroom/devops/orion/microcrm/MicroCRMApplicationTests.java =====
 package com.openclassroom.devops.orion.microcrm;
 
@@ -331,6 +393,67 @@ class MicroCRMApplicationTests {
 	void contextLoads() {
 	}
 
+}
+
+
+===== src/test/java/com/openclassroom/devops/orion/microcrm/OrganizationTest.java =====
+package com.openclassroom.devops.orion.microcrm;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+class OrganizationTest {
+
+    @Test
+    void shouldAddPersonWhenListIsNull() {
+
+        Organization organization = new Organization();
+        Person person = new Person();
+
+        organization.addPerson(person);
+
+        assertEquals(1, organization.getPersons().size());
+        assertTrue(organization.getPersons().contains(person));
+    }
+
+    @Test
+    void shouldRemovePerson() {
+
+        Organization organization = new Organization();
+        Person person = new Person();
+
+        organization.addPerson(person);
+
+        organization.removePerson(person);
+
+        assertTrue(organization.getPersons().isEmpty());
+    }
+
+    @Test
+    void shouldSetPersons() {
+
+        Organization organization = new Organization();
+
+        ArrayList<Person> persons = new ArrayList<>();
+        persons.add(new Person());
+
+        organization.setPersons(persons);
+
+        assertEquals(persons, organization.getPersons());
+    }
+
+    @Test
+    void shouldSetName() {
+
+        Organization organization = new Organization();
+
+        organization.setName("OpenClassrooms");
+
+        assertEquals("OpenClassrooms", organization.getName());
+    }
 }
 
 
@@ -370,4 +493,100 @@ public class PersonRepositoryIntegrationTest {
         assertEquals(jdoe.getEmail(), found.get().getEmail());
     }
 }
+
+===== src/test/java/com/openclassroom/devops/orion/microcrm/PersonTest.java =====
+package com.openclassroom.devops.orion.microcrm;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+class PersonTest {
+
+    @Test
+    void constructorShouldInitializeFields() {
+
+        Person person = new Person("John", "Doe", "john@test.com");
+
+        assertEquals("John", person.getFirstName());
+        assertEquals("Doe", person.getLastName());
+        assertEquals("john@test.com", person.getEmail());
+    }
+
+    @Test
+    void settersShouldWork() {
+
+        Person person = new Person();
+
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setEmail("john@test.com");
+        person.setPhone("010203");
+        person.setBio("Developer");
+
+        assertEquals("John", person.getFirstName());
+        assertEquals("Doe", person.getLastName());
+        assertEquals("john@test.com", person.getEmail());
+        assertEquals("010203", person.getPhone());
+        assertEquals("Developer", person.getBio());
+    }
+
+    @Test
+    void preRemoveShouldRemovePersonFromOrganizations() throws Exception {
+
+        Person person = new Person();
+
+        Organization organization = new Organization();
+        organization.addPerson(person);
+
+        ArrayList<Organization> organizations = new ArrayList<>();
+        organizations.add(organization);
+
+        Field field = Person.class.getDeclaredField("organizations");
+        field.setAccessible(true);
+        field.set(person, organizations);
+
+        Method method = Person.class.getDeclaredMethod("remoteFromOrganization");
+        method.setAccessible(true);
+        method.invoke(person);
+
+        assertFalse(organization.getPersons().contains(person));
+    }
+}
+
+
+===== src/test/java/com/openclassroom/devops/orion/microcrm/SpringDataRestCustomizationTest.java =====
+package com.openclassroom.devops.orion.microcrm;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
+import static org.mockito.Mockito.*;
+
+class SpringDataRestCustomizationTest {
+
+    @Test
+    void shouldConfigureRestRepositories() {
+
+        SpringDataRestCustomization customization =
+                new SpringDataRestCustomization();
+
+        RepositoryRestConfiguration configuration =
+                mock(RepositoryRestConfiguration.class);
+
+        CorsRegistry registry = new CorsRegistry();
+
+        customization.configureRepositoryRestConfiguration(configuration, registry);
+
+        verify(configuration).exposeIdsFor(Person.class, Organization.class);
+    }
+
+}
+
 

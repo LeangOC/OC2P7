@@ -29,7 +29,8 @@ jobs:
 
       - name: Check JaCoCo report
         run: |
-          ls -R back/build/reports/jacoco   
+          pwd
+          find . -name "jacocoTestReport.xml" 
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5

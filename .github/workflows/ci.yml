@@ -27,7 +27,7 @@ jobs:
       - name: Build and Test
         run: ./gradlew build jacocoTestReport
 
-      - name: SonarQube Scan
+      - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

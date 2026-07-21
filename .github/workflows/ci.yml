@@ -22,11 +22,5 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: gradle
-          
-      - name: Check file permissions
-        run: ls -l gradlew
-
-      - name: Check Git file mode
-        run: git ls-files --stage gradlew
-      
+               
       - run: ./gradlew build

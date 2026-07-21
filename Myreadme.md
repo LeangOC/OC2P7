@@ -45,4 +45,9 @@ Image
 
 # dev3
 1. Implémentation Pipeline CI pour le backend
+  - Error droit d'exécution gradlew : ![Ci_backend_error.png](Ci_backend_error.png)
+  - Afficher droit gradlew dans pipeline : ![Pipeline_Afficher_Gradlew_Droit.png](My/MyEtapes/dev3/Pipeline_Afficher_Gradlew_Droit.png)
+  - Forcer droit exécution Git INDEX : ![git_local_forcer_index_droit_fichier.png](My/MyEtapes/dev3/git_local_forcer_index_droit_fichier.png)
+  - ci_forcer_git_indew.yml 
+
 

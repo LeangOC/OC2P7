@@ -32,5 +32,13 @@ Image
    - docker run -it --rm -p 8080:8080 -p 80:80  microcrm-standalone:latest  
    ![standalone_docker_container.png](misc/screenshots/standalone_docker_container.png)  
    
- 
-   
+ # dev2
+1. Implémentation : 
+  - front/Dockerfile,front/Dockerfile front/.dockerignore
+  - back/Dockerfile,back/Dockerfile back/.dockerignore
+  - docker-compose.yml
+
+2. Lancement de l'application avec Docker compose
+   - $ docker compose up -d   
+   - Verification : docker compose ps :
+   ![docker-compose_ps.png](misc/screenshots/docker-compose_ps.png)

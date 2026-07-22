@@ -73,5 +73,7 @@ Image
 # dev5 
 1. Implémentation frontend dans le CI
 
+# dev6
+1. Implémentation CD dans le pipeline
 
 

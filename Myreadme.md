@@ -68,6 +68,10 @@ Image
 
 # dev4 
 1. Implémentation sonacloud dans ci
-2. Test JaCoCo : couverture 89%   
+2. Test JaCoCo : couverture 89%
+
+# dev5 
+1. Implémentation frontend dans le CI
+
 
 
